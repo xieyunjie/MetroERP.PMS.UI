@@ -1,0 +1,10 @@
+{
+  "extraBabelPlugins": [ ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }]],
+  "proxy": {
+    "/pms": {
+      "target": "http://localhost:6600/",
+      "changeOrigin": true,
+      "pathRewrite": { "^/pms" : "" }
+    }
+  }
+}
