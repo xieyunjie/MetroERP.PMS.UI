@@ -1,6 +1,6 @@
 import React from 'react'
 //import { connect } from 'dva';
-import { Table, Popconfirm, Form, Input, Button, DatePicker,Pagination } from 'antd';
+import { Table, Popconfirm, Form, Input, Button, DatePicker,Pagination, Icon, Divider } from 'antd';
 //import {PAGE_SIZE} from '../../utils/constants';
 import styles from './Project.css';  
 import moment from 'moment';
@@ -8,27 +8,23 @@ import moment from 'moment';
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 
-function ProjectCmp({
+function ProjectCmp({ 
     list: dataSource, 
-    // total, 
-    // page:current,
     pagination,
     deleteHandler, 
     showEditor, 
     form:{getFieldDecorator,validateFields,getFieldsValue},
     onSearchHandler,
-    onPageChange
-}){
-    // function deleteHandler(id){
-    //     console.warn(`delete ${id}`);
-    // }
+    onPageChange,
+    loading,
+}){ 
 
     const columns=[
         {
             title: '项目名称',
             dataIndex: 'ProjectName',
             key: 'ProjectName',
-            render: text => <a href="">{text}</a>,
+            //render: text => <a href="">{text}</a>,
           },
           {
             title: 'ProjectContext',
@@ -50,9 +46,9 @@ function ProjectCmp({
             key: 'operation',
             render: (text, { id }) => (
               <span className={styles.operation}>
-                <a href="">Edit</a>
-                <Popconfirm title="Confirm to delete?" onConfirm={deleteHandler.bind(null, id)}>
-                  <a href="">Delete</a>
+                <a href="">编辑</a>
+                <Popconfirm title="是否确认删除?" onConfirm={deleteHandler.bind(null, id)}>
+                  <a href="">删除</a>
                 </Popconfirm>
               </span>
             ),
@@ -91,17 +87,17 @@ function ProjectCmp({
               }  
             </FormItem>
             <FormItem>
-              <Button type="primary" onClick = {onSearch}> 查找</Button>
-            </FormItem>
-            <FormItem>
-              <Button type="success" onClick = {showEditor}> Add</Button>
-            </FormItem>
+              <Button type="primary" onClick = {onSearch}><Icon type="search" />查找</Button>
+              <Divider type="vertical" />
+              <Button type="success" onClick = {showEditor}><Icon type="plus" />Add</Button>
+            </FormItem> 
           </Form>
         <div>
           <Table
             columns={columns}
             dataSource={dataSource}
             rowKey={record => record.UID}
+            loading={loading}
             pagination={false}
           />
           <Pagination className="ant-table-pagination"  total={pagination.total} 

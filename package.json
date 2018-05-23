@@ -9,7 +9,9 @@
   "dependencies": {
     "antd": "^3.5.2",
     "dva": "^2.2.3",
+    "dva-loading": "^2.0.1",
     "lodash": "^4.17.10",
+    "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   },

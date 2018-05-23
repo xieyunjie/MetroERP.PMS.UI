@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import { connect } from 'dva'
 import ProjectCmp from '../../components/Project/ProjectCmp'
 import ProjectEditorCmp from '../../components/Project/ProjectEditorCmp'
@@ -6,9 +7,10 @@ import _ from 'lodash'
 //import {PAGE_SIZE} from '../../utils/constants';
 //import Item from 'antd/lib/list/Item';
 
-function genProject({dispatch, projects, componentDidMount}){
+function ProjectView({dispatch, projects}){
+    //console.log(projects);
   
-    const { list, currentItem, editorVisible, editorType, MailList, pagination} = projects;
+    const { list, currentItem, editorVisible, editorType, MailList, pagination,loading} = projects;
     const showEditor = ()=>{
         dispatch({type:'projects/initEditor'});
     };
@@ -41,7 +43,8 @@ function genProject({dispatch, projects, componentDidMount}){
             pm.page= page;
             pm.page_size = pageSize;
             dispatch({type:'projects/search', payload:pagination.queryparams});
-        }
+        },
+        loading,
     }
 
     const confirmHandler =(projectValue) => { 
@@ -110,20 +113,15 @@ function genProject({dispatch, projects, componentDidMount}){
 // }
 
 
-// Projects.propTypes = {
-//     projects: PropTypes.object,
-// };
+ProjectView.propTypes = {
+    projects: PropTypes.object,
+};
 
-function mapStateToProps(projects) {
-    //console.log(states);
-    return projects;
-    // const { list, total, page } = states.projects;
-    // return {
-    //   //loading: state.loading.models.users,
-    //   list,
-    //   total,
-    //   page,
-    // };
+function mapStateToProps(state) {
+    //console.log(state);
+    const projects = state.projects;
+    projects.loading = state.loading.models.projects;
+    return {projects};  
   }
   
-export default connect(mapStateToProps)(genProject);
+export default connect(mapStateToProps)(ProjectView);
