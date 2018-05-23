@@ -18,11 +18,7 @@ export default {
       queryparams:{},
       page_size:page_size,
       current:1
-    },
-    // total: 0,
-    // page:1,
-
-    //currentItem: {},
+    }, 
     editorVisible: false,
     editorType: 'create',
 
@@ -46,12 +42,7 @@ export default {
     }
   },
 
-  effects: {
-    // * fetch({ payload: searchParams }, { call, put }) {
-    //     const { data, total } = yield call(projectSvc.fetch, searchParams); 
-    //     yield put({type: 'save', payload: {data, total, searchParams}});
-    // },
-
+  effects: { 
     * create({payload:values}, {call,put}){  
         const {success} = yield call(projectSvc.create,values);
         if(success === true){ 
@@ -75,8 +66,7 @@ export default {
     setup({
       dispatch,
       history,state
-    }) { return history.listen(({pathname}) => {
-      //console.log(state)
+    }) { return history.listen(({pathname}) => { 
         if (pathname === '/projects') {
           dispatch({
             type: 'search',

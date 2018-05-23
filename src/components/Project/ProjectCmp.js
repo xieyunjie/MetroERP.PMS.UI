@@ -17,6 +17,7 @@ function ProjectCmp({
     onSearchHandler,
     onPageChange,
     loading,
+    onAddIndexValue
 }){ 
 
     const columns=[
@@ -90,6 +91,8 @@ function ProjectCmp({
               <Button type="primary" onClick = {onSearch}><Icon type="search" />查找</Button>
               <Divider type="vertical" />
               <Button type="success" onClick = {showEditor}><Icon type="plus" />Add</Button>
+              <Divider type="vertical" />
+              <Button type="success" onClick = {onAddIndexValue}><Icon type="plus" />onAddIndexValue</Button>
             </FormItem> 
           </Form>
         <div>

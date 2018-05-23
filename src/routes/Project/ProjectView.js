@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva'
 import ProjectCmp from '../../components/Project/ProjectCmp'
 import ProjectEditorCmp from '../../components/Project/ProjectEditorCmp'
-import _ from 'lodash'
-//import {PAGE_SIZE} from '../../utils/constants';
-//import Item from 'antd/lib/list/Item';
+import _ from 'lodash' 
 
-function ProjectView({dispatch, projects}){
+function ProjectView({dispatch, projects, index}){
     //console.log(projects);
   
     const { list, currentItem, editorVisible, editorType, MailList, pagination,loading} = projects;
@@ -17,8 +15,7 @@ function ProjectView({dispatch, projects}){
     const hideEditor = ()=>{
         dispatch({type:'projects/hideEditor'});
     }; 
-    const onSearchHandler = (values) =>{
-        //console.log(values);
+    const onSearchHandler = (values) =>{ 
 
         let searchParams = {
             name:values.name,
@@ -45,6 +42,9 @@ function ProjectView({dispatch, projects}){
             dispatch({type:'projects/search', payload:pagination.queryparams});
         },
         loading,
+        onAddIndexValue:function(){
+            dispatch({type:'index/add'})
+        }
     }
 
     const confirmHandler =(projectValue) => { 
@@ -95,33 +95,19 @@ function ProjectView({dispatch, projects}){
             <ProjectEditorCmp {...editorProps} ></ProjectEditorCmp>
         </div>
     )
-}
-
-// class Projects extends Component{
-//     constructor(props) {
-//         super(props)
-//     }
-
-// 	// componentWillMount(){
-// 	// 	// let {isLogin} = this.props.systemUser;
-// 	// 	// return !isLogin && redirect();
-// 	// }
-
-//     render() {
-// 		 return genProject(this.props);
-//     }
-// }
-
+} 
 
 ProjectView.propTypes = {
     projects: PropTypes.object,
 };
 
-function mapStateToProps(state) {
-    //console.log(state);
+function mapStateToProps(state) { 
     const projects = state.projects;
     projects.loading = state.loading.models.projects;
-    return {projects};  
+
+    const index = state.index;
+
+    return {projects,index};  
   }
   
 export default connect(mapStateToProps)(ProjectView);

@@ -12,6 +12,7 @@ app.use(createLoading());
 // app.model(require('./models/example').default);
 app.model(require('./models/projectModel').default)
 app.model(require('./models/homeModel').default)
+app.model(require('./models/indexModel').default)
 
 // 4. Router
 app.router(require('./router').default);
