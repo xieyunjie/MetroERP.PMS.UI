@@ -21,7 +21,7 @@ export default {
     reducers: {
         add(state, action){
             state.indexValue++;
-            console.log(state.indexValue);
+            //console.log(state.indexValue);
             return {...state};
         }
     //   save(state, action) {
