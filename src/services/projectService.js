@@ -12,6 +12,9 @@ export function search(searchParsms) {
 export function GetMailList(){
   return req.get(`/pms/MailList/GetMailListByQuery?query=&page=1&start=0&limit=25`);
 }
+export function getOneProject(id){
+  return req.get('/pms/Project/GetOne', {id});
+}
 
 export function create(values){
   return req.post('/pms/Project/CreateProject',values); 

@@ -3,14 +3,31 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva'
 import ProjectCmp from '../../components/Project/ProjectCmp'
 import ProjectEditorCmp from '../../components/Project/ProjectEditorCmp'
-import _ from 'lodash' 
+import {EMPTY_UID} from './../../utils/constants'
+//import { Route} from 'dva/router';
+//import ProjectEditView from './ProjectEditView'
+import _ from 'lodash' ;
+import moment from 'moment';
 
-function ProjectView({dispatch, projects, index}){
-    //console.log(projects);
-  
+function ProjectView({dispatch, projects, index, match }){
+    //console.log(this.stats);
+    //console.log(match);
     const { list, currentItem, editorVisible, editorType, MailList, pagination,loading} = projects;
-    const showEditor = ()=>{
-        dispatch({type:'projects/initEditor'});
+
+    const showEditor = (currentItem)=>{
+        if(currentItem === null){
+            currentItem = {
+                UID: EMPTY_UID,
+                ProjectName:'',
+                ProjectContext:'',
+                BeginDate: moment().format("YYYY-MM-DD"),
+                EndDate:moment().format("YYYY-MM-DD"),
+                FinishDate:null,
+                Comment:'',
+                ProjectMailList:[]
+            }
+        } 
+        dispatch({type:'projects/initEditor',payload:{currentItem}});
     };
     const hideEditor = ()=>{
         dispatch({type:'projects/hideEditor'});
@@ -44,7 +61,8 @@ function ProjectView({dispatch, projects, index}){
         loading,
         onAddIndexValue:function(){
             dispatch({type:'index/add'})
-        }
+        },
+        editURL:`${match.url}/edit/:projectuid`
     }
 
     const confirmHandler =(projectValue) => { 
@@ -90,7 +108,7 @@ function ProjectView({dispatch, projects, index}){
 
 
     return (
-        <div> 
+        <div>  
             <ProjectCmp {...projectProps}></ProjectCmp> 
             <ProjectEditorCmp {...editorProps} ></ProjectEditorCmp>
         </div>

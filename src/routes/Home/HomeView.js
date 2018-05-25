@@ -1,8 +1,9 @@
 import React from 'react'; 
-import { Route, Link} from 'dva/router';
+import { Route, Link, HashRouter} from 'dva/router';
 import {connect} from 'dva';  
 import { Layout, Menu, Breadcrumb, LocaleProvider } from 'antd'; 
-import ProjectView from './../Project/ProjectView'
+import ProjectView from './../Project/ProjectView';
+//import ProjectEditView from './../Project/ProjectEditView';
 import IndexView from './../Index/IndexView'
 
 import style from './HomeView.css'
@@ -42,9 +43,13 @@ function HomeView({match, children, home}){
           </Breadcrumb>
            
           <div style={{ background: '#fff', padding: '10px 5px 50px 5px', height: '100%' }}>
-            <Route  path="/"  exact component={IndexView} />  
-            <Route path="/index" exact component={IndexView} /> 
-            <Route path="/projects" exact component={ProjectView} />
+            
+              <Route  path="/"  exact component={IndexView} />  
+              <Route path="/index" exact component={IndexView} /> 
+              <Route path="/projects" exact component={ProjectView} />
+              {/* <Route path='/projects/edit/:projectuid' component={ProjectEditView} /> */}
+              {/* <Route path="/projects/:projectuid" exact component={ProjectEditView} /> */}
+           
           </div> 
         </Content>
         <Footer className={style.footer_cls} style={{ textAlign: 'center' }}>
@@ -54,7 +59,9 @@ function HomeView({match, children, home}){
     );
     return ( 
       <LocaleProvider locale={zh_CN}>
+      <HashRouter>
         <APP />
+        </HashRouter>
       </LocaleProvider>
     )
 }

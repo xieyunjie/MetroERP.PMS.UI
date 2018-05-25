@@ -1,9 +1,10 @@
 import React from 'react'
 //import { connect } from 'dva';
+//import {Link} from 'dva/router'
 import { Table, Popconfirm, Form, Input, Button, DatePicker,Pagination, Icon, Divider } from 'antd';
 //import {PAGE_SIZE} from '../../utils/constants';
 import styles from './Project.css';  
-import moment from 'moment';
+import moment from 'moment'; 
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -17,9 +18,21 @@ function ProjectCmp({
     onSearchHandler,
     onPageChange,
     loading,
-    onAddIndexValue
+    onAddIndexValue,
+    editURL,
 }){ 
-
+    const onSearch = function(e){
+      e.preventDefault();
+      validateFields((err,values)=>{
+        onSearchHandler(values);
+      }) 
+    } 
+    // const addProject = function(e){
+    //       showEditor(null)
+    // } 
+    // const editPoject = function(e){
+    //   console.log("dddd");
+    // }
     const columns=[
         {
             title: '项目名称',
@@ -45,34 +58,25 @@ function ProjectCmp({
           {
             title: '操作',
             key: 'operation',
-            render: (text, { id }) => (
-              <span className={styles.operation}>
-                <a href="">编辑</a>
-                <Popconfirm title="是否确认删除?" onConfirm={deleteHandler.bind(null, id)}>
-                  <a href="">删除</a>
-                </Popconfirm>
-              </span>
-            ),
+            render: (text, projectObj, index) => {
+              //const url =`/projects/edit/${UID}`;
+              return (
+                <span className={styles.operation}> 
+                 <Button type="primary" ghost onClick={showEditor.bind(null,projectObj)}>编辑</Button>
+                  {/* <Link to={url}>编辑</Link> */}
+                  <Popconfirm title="是否确认删除?" onConfirm={deleteHandler.bind(null, projectObj.UID)}>
+                    <a href="">删除</a>
+                  </Popconfirm>
+                </span>
+              )
+            },
           },
     ];
     //const PAGE_SIZE= 50 
-    const onSearch = function(e){
-      e.preventDefault();
-      validateFields((err,values)=>{
-        onSearchHandler(values);
-      })
-      //onSearchHandler
-    }
-    // const paginationCmp = {
-    //     className:"ant-table-pagination",
-    //     total:pagination.total, 
-    //     defaultCurrent:1,
-    //     pageSize:pagination.page_size
-    // }
+
  
     return (
-        <div className={styles.normal}>
-        {/* <span>{pagination.total}</span><span>{pagination.page_size}</span> */}
+        <div className={styles.normal}>  
           <Form layout="inline">
             <FormItem label="名称">
               {
@@ -90,7 +94,7 @@ function ProjectCmp({
             <FormItem>
               <Button type="primary" onClick = {onSearch}><Icon type="search" />查找</Button>
               <Divider type="vertical" />
-              <Button type="success" onClick = {showEditor}><Icon type="plus" />Add</Button>
+              <Button type="success" onClick = {showEditor.bind(null,null)}><Icon type="plus" />Add</Button>
               <Divider type="vertical" />
               <Button type="success" onClick = {onAddIndexValue}><Icon type="plus" />onAddIndexValue</Button>
             </FormItem> 

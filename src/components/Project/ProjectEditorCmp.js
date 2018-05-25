@@ -1,13 +1,12 @@
-//import React, {Component, PropTypes} from 'react';
-//import { connect } from 'dva';
 import { Form, Input, DatePicker, Modal, Select } from 'antd';
-//import _ from 'lodash'
-//import styles from './Project.css';
+import _ from 'lodash'; 
+import moment from 'moment'; 
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const { TextArea } = Input;
 
-function ProjectEditorCmp({ 
+function ProjectEditorCmp({  
     MailList,
     currentItem, 
     form:{getFieldDecorator,validateFields}, 
@@ -15,31 +14,33 @@ function ProjectEditorCmp({
     confirmHandler, 
     cancelHandler
 }){
+    //const {}
     const formItemLayout = {
         labelCol: { span: 6 },
         wrapperCol: { span: 14 },
     };
 
     const OKClick = (e)=>{
-        validateFields((err, values)=>{
-            //let copyValues = _.cloneDeep(values);
-            //const copyValues = {...values, BeginDate:values.BeginDate.format("YYYY-MM-DD"), EndDate:values.EndDate.format("YYYY-MM-DD")}
-            //console.log(copyValues);
+        validateFields((err, values)=>{ 
             confirmHandler(values);
         });
-    }
-    //console.log(MailList);
-    //const children = [];
-    // for (let i = 0; i < MailList.length; i++) {
-    //     children.push(<Option key={MailList[i].EmployeeUID}>{MailList[i].EmployeeName}</Option>);
-    //   }
+    } 
+ 
+    const{ProjectName, ProjectContext,BeginDate,EndDate,FinishDate,Comment, ProjectMailList} = currentItem;
+    let mailIDs = [];
+    _.forEach(ProjectMailList,function(item){
+        mailIDs.push(item.MailID.toString());
+    })
+    // ProjectMailList.map((item)=>{
+
+    // });
     return (
-        <Modal visible={editorVisible} onCancel= {cancelHandler} onOk={OKClick}>
+        <Modal visible={editorVisible} onCancel= {cancelHandler} onOk={OKClick} title='编辑项目信息'>
             <Form>
                 <FormItem label="项目名称" {...formItemLayout}>
                 {
                     getFieldDecorator('ProjectName', {
-                        //initialValue: customerName,
+                        initialValue:ProjectName,
                         rules: [
                             //{required: true, message: '客户名称不能为空'}
                         ]
@@ -51,7 +52,7 @@ function ProjectEditorCmp({
                 <FormItem label="项目内容" {...formItemLayout}>
                 {
                     getFieldDecorator('ProjectContext', {
-                        //initialValue: customerName,
+                        initialValue:ProjectContext,
                         rules: [
                             //{required: true, message: '客户名称不能为空'}
                         ]
@@ -63,7 +64,7 @@ function ProjectEditorCmp({
                 <FormItem label="开始时间" format {...formItemLayout}>
                 {
                     getFieldDecorator('BeginDate', {
-                        //initialValue: customerName,
+                        initialValue: moment(BeginDate),
                         rules: [
                             //{required: true, message: '客户名称不能为空'}
                         ]
@@ -75,7 +76,19 @@ function ProjectEditorCmp({
                 <FormItem label="结束时间" {...formItemLayout}>
                 {
                     getFieldDecorator('EndDate', {
-                        //initialValue: customerName,
+                        initialValue: moment(EndDate),
+                        rules: [
+                            //{required: true, message: '客户名称不能为空'}
+                        ]
+                    })(
+                        <DatePicker />
+                    )
+                }
+                </FormItem>                
+                <FormItem label="完成时间" {...formItemLayout}>
+                {
+                    getFieldDecorator('FinishDate', {
+                        initialValue: moment(FinishDate),
                         rules: [
                             //{required: true, message: '客户名称不能为空'}
                         ]
@@ -84,10 +97,22 @@ function ProjectEditorCmp({
                     )
                 }
                 </FormItem>
+                <FormItem label="备注" {...formItemLayout}>
+                {
+                    getFieldDecorator('Comment', {
+                        initialValue: Comment,
+                        rules: [
+                            //{required: true, message: '客户名称不能为空'}
+                        ]
+                    })(
+                        <TextArea rows={2} />
+                    )
+                }
+                </FormItem>
                 <FormItem label="项目人员" {...formItemLayout}>
                 {
                     getFieldDecorator('Employees', {
-                        //initialValue: customerName,
+                        initialValue: mailIDs,
                         rules: [
                             //{required: true, message: '客户名称不能为空'}
                         ]
@@ -103,6 +128,7 @@ function ProjectEditorCmp({
                     )
                 }
                 </FormItem>
+                
                 {/* <FormItem>
                     <Button type="primary" onClick={confirmHandler}> Save </Button>
                 </FormItem> */}

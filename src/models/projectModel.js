@@ -3,16 +3,17 @@ import moment from 'moment';
 //import {PAGE_SIZE} from '../utils/constants';
 //import { stat } from 'fs'; 
 const page_size = 2;
+//const editUrlRegex = /^\/projects\/[0-9]*$/;
 //const page_size = PAGE_SIZE;
 
 
 export default {
   namespace: 'projects',
   state: {
-    list: [],
+    list: [], 
 
+    currentItem:{},
     pagination:{
-      currentItem:{},
       total:0,
       page:1,
       queryparams:{},
@@ -33,12 +34,16 @@ export default {
 
     showEditor(state,action){
       const editorVisible = true;   
-      const MailList = action.payload.data;
-      return {...state, ...action.payload, editorVisible, MailList};
+      const MailList = action.payload.MailList,
+            currentItem = action.payload.currentItem;
+      return {...state, ...action.payload, editorVisible, MailList, currentItem};
     }, 
     hideEditor(state, action){ 
       const editorVisible = false;  
       return {...state, ...action.payload, editorVisible};
+    },
+    setCurrentItem(state, action){
+      return {...state, currentItem:action.payload};
     }
   },
 
@@ -57,16 +62,27 @@ export default {
     },
 
     * initEditor({payload},{call,put}){
+
         const {data} = yield call(projectSvc.GetMailList)
-        yield put({type:'showEditor',payload:{data}});
+        yield put({type:'showEditor',payload:{MailList:data, currentItem:payload.currentItem}});
+    },
+    * getCurrentItem({payload:id},{call,put}){ 
+        let data = {};
+        if(id===0){
+          data = yield call(projectSvc.getOneProject,id).data;  
+        } 
+        yield put ({type: 'setCurrentItem', payload: {data}});
     }
   },
 
   subscriptions: {
-    setup({
-      dispatch,
-      history,state
-    }) { return history.listen(({pathname}) => { 
+    setup(obj) { 
+      const history = obj.history,
+            dispatch = obj.dispatch;
+       console.log(obj);
+       
+      return history.listen((location) => {
+        const pathname = location.pathname;
         if (pathname === '/projects') {
           dispatch({
             type: 'search',
@@ -78,7 +94,15 @@ export default {
               endDate: moment().format("YYYY-MM-DD"),
             }
           });
-        }
+        }// 这里无法获取得到url参数
+        // else if(editUrlRegex.test(pathname)){
+        //   dispatch({
+        //     type: 'getcurrentitem',
+        //     payload: {
+        //       id:0
+        //     }
+        //   });
+        // }
       });
     },
   },

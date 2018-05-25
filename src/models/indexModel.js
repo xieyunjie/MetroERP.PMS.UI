@@ -8,9 +8,15 @@ export default {
     },
   
     subscriptions: {
-      setup({ dispatch, history }) {  // eslint-disable-line
+        setup({
+          dispatch,
+          history,state
+        }) { 
+          return history.listen((location) => { 
+            //console.log(location); 
+          });
+        },
       },
-    },
   
     effects: {
     //   *fetch({ payload }, { call, put }) {  // eslint-disable-line
