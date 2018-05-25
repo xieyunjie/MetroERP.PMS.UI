@@ -19,3 +19,7 @@ export function getOneProject(id){
 export function create(values){
   return req.post('/pms/Project/CreateProject',values); 
 }
+export function update(values){
+  return req.post('/pms/Project/ModifyProject',values); 
+}
+

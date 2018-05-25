@@ -56,6 +56,17 @@ function ProjectCmp({
             key: 'EndDate',
           },
           {
+            title: '项目人员', 
+            key: 'ProjectMailList',
+            render:(text, {ProjectMailList},index)=>{
+              let res = [];
+              res.push(ProjectMailList.map((item)=>{
+                return <span>{item.EmployeeName}<Divider type="vertical" /></span>
+              }))  
+              return (res)
+            }
+          },
+          {
             title: '操作',
             key: 'operation',
             render: (text, projectObj, index) => {

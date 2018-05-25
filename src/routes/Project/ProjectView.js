@@ -6,13 +6,13 @@ import ProjectEditorCmp from '../../components/Project/ProjectEditorCmp'
 import {EMPTY_UID} from './../../utils/constants'
 //import { Route} from 'dva/router';
 //import ProjectEditView from './ProjectEditView'
-import _ from 'lodash' ;
+//import _ from 'lodash' ;
 import moment from 'moment';
 
 function ProjectView({dispatch, projects, index, match }){
     //console.log(this.stats);
     //console.log(match);
-    const { list, currentItem, editorVisible, editorType, MailList, pagination,loading} = projects;
+    const { list, currentItem, editorVisible, MailList, pagination,loading} = projects;
 
     const showEditor = (currentItem)=>{
         if(currentItem === null){
@@ -24,7 +24,8 @@ function ProjectView({dispatch, projects, index, match }){
                 EndDate:moment().format("YYYY-MM-DD"),
                 FinishDate:null,
                 Comment:'',
-                ProjectMailList:[]
+                ProjectMailList:[],
+                Status:1
             }
         } 
         dispatch({type:'projects/initEditor',payload:{currentItem}});
@@ -39,7 +40,7 @@ function ProjectView({dispatch, projects, index, match }){
             status:1,
             beginDate:values.searchdate[0].format("YYYY-MM-DD"),
             endDate:values.searchdate[1].format("YYYY-MM-DD"),
-            page:0,
+            page:1,
             page_size:2
         }
         dispatch({type:'projects/search', payload:searchParams});
@@ -65,38 +66,43 @@ function ProjectView({dispatch, projects, index, match }){
         editURL:`${match.url}/edit/:projectuid`
     }
 
-    const confirmHandler =(projectValue) => { 
-        let  copyValues = {};
-        if(editorType === 'create'){
-            copyValues = {
-                ...projectValue, 
+    const confirmHandler =(projectValue,employeeMailList) => { 
+        //let  copyValues = {};
+        // if(editorType === 'create'){
+        //     // copyValues = {
+        //     //     ...projectValue, 
     
-                BeginDate:projectValue.BeginDate.format("YYYY-MM-DD"), 
-                EndDate:projectValue.EndDate.format("YYYY-MM-DD")
-            };
-        }
+        //     //     BeginDate:projectValue.BeginDate.format("YYYY-MM-DD"), 
+        //     //     EndDate:projectValue.EndDate.format("YYYY-MM-DD")
+        //     // };
+        // }
         
-        let employeeMailList = [];
-        _.forEach(copyValues.Employees,function(emp, key){
-            const id = parseInt(emp,0);
-            let q = _.find(MailList,{ID: id});
-            if(q){
-                employeeMailList.push({
-                    ID:0,
-                    MailID:q.ID,
-                    EmployeeUID:q.EmployeeUID,
-                    EmployeeName:q.EmployeeName,
-                    MailAddress:q.MailAddress,
-                    IsMainEmp:key===0?true:false
-                })
-            }
-        })  
+        // let employeeMailList = [];
+        // _.forEach(projectValue.Employees,function(emp, key){
+        //     const id = parseInt(emp,0);
+        //     let q = _.find(MailList,{ID: id});
+        //     if(q){
+        //         employeeMailList.push({
+        //             ID:0,
+        //             MailID:q.ID,
+        //             EmployeeUID:q.EmployeeUID,
+        //             EmployeeName:q.EmployeeName,
+        //             MailAddress:q.MailAddress,
+        //             IsMainEmp:key===0?true:false
+        //         })
+        //     }
+        // })  
 
         const values = {
-            projectJson:JSON.stringify(copyValues) ,
+            projectJson:JSON.stringify(projectValue) ,
             json:JSON.stringify(employeeMailList)
+        } 
+        if(projectValue.UID === EMPTY_UID){
+            dispatch({type:'projects/create',payload:{values,searchParams:pagination.queryparams}});    
         }
-        dispatch({type:'projects/create',payload:values});
+        else{
+            dispatch({type:'projects/update',payload:{values,searchParams:pagination.queryparams}});
+        }
     }
     const editorProps = {
         currentItem,

@@ -48,21 +48,31 @@ export default {
   },
 
   effects: { 
-    * create({payload:values}, {call,put}){  
-        const {success} = yield call(projectSvc.create,values);
+    * create({payload:obj}, {call,put}){  
+        const {success} = yield call(projectSvc.create,obj.values);
         if(success === true){ 
-          yield put({type:'hideEditor'});
-          const {data} =  yield call(projectSvc.fetch, {page:1});
-          yield put({type:'save', payload:{data}}); 
+          yield put({type:'hideEditor'}); 
+          // const {data,total} =  yield call(projectSvc.search, obj.searchParams);
+          // yield put({type:'save', payload:{data,total,searchParams:obj.searchParams}}); 
+          yield put({type:'search', payload:obj.searchParams}); 
         }
     },
+    * update({payload:obj}, {call,put}){  
+        const {success} = yield call(projectSvc.update,obj.values);
+        if(success === true){ 
+          yield put({type:'hideEditor'});
+          // const {data,total} =  yield call(projectSvc.search, obj.searchParams);
+          // yield put({type:'save', payload:{data,total,searchParams:obj.searchParams}}); 
+          yield put({type:'search', payload:obj.searchParams}); 
+        }
+    },
+
     *search({ payload: searchParams }, { call, put }) {
         const { data,total } = yield call(projectSvc.search, searchParams); 
         yield put({type: 'save', payload: {data,total,searchParams}});
     },
 
     * initEditor({payload},{call,put}){
-
         const {data} = yield call(projectSvc.GetMailList)
         yield put({type:'showEditor',payload:{MailList:data, currentItem:payload.currentItem}});
     },
