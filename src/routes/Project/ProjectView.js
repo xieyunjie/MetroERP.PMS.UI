@@ -66,36 +66,12 @@ function ProjectView({dispatch, projects, index, match }){
         editURL:`${match.url}/edit/:projectuid`
     }
 
-    const confirmHandler =(projectValue,employeeMailList) => { 
-        //let  copyValues = {};
-        // if(editorType === 'create'){
-        //     // copyValues = {
-        //     //     ...projectValue, 
-    
-        //     //     BeginDate:projectValue.BeginDate.format("YYYY-MM-DD"), 
-        //     //     EndDate:projectValue.EndDate.format("YYYY-MM-DD")
-        //     // };
-        // }
-        
-        // let employeeMailList = [];
-        // _.forEach(projectValue.Employees,function(emp, key){
-        //     const id = parseInt(emp,0);
-        //     let q = _.find(MailList,{ID: id});
-        //     if(q){
-        //         employeeMailList.push({
-        //             ID:0,
-        //             MailID:q.ID,
-        //             EmployeeUID:q.EmployeeUID,
-        //             EmployeeName:q.EmployeeName,
-        //             MailAddress:q.MailAddress,
-        //             IsMainEmp:key===0?true:false
-        //         })
-        //     }
-        // })  
+    const confirmHandler =(projectValue,employeeMailList, deletedList) => {  
 
         const values = {
             projectJson:JSON.stringify(projectValue) ,
-            json:JSON.stringify(employeeMailList)
+            json:JSON.stringify(employeeMailList),
+            deleteJson:JSON.stringify(deletedList)
         } 
         if(projectValue.UID === EMPTY_UID){
             dispatch({type:'projects/create',payload:{values,searchParams:pagination.queryparams}});    

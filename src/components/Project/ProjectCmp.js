@@ -37,38 +37,50 @@ function ProjectCmp({
         {
             title: '项目名称',
             dataIndex: 'ProjectName',
-            key: 'ProjectName',
+            //key: 'ProjectName',
             //render: text => <a href="">{text}</a>,
           },
           {
             title: 'ProjectContext',
             dataIndex: 'ProjectContext',
-            key: 'ProjectContext',
+            //key: 'ProjectContext',
           },
           {
             title: 'BeginDate',
             dataIndex: 'BeginDate',
-            key: 'BeginDate',
+            width:120,
+            render:(text)=>{ 
+              return  moment(text).format("YYYY-MM-DD")
+            }
+            //key: 'BeginDate',
           },
           {
             title: '结束时间',
             dataIndex: 'EndDate',
-            key: 'EndDate',
+            width:120,
+            render:(text)=>{ 
+              return  moment(text).format("YYYY-MM-DD")
+            }
+            //key: 'EndDate',
           },
           {
-            title: '项目人员', 
-            key: 'ProjectMailList',
-            render:(text, {ProjectMailList},index)=>{
+            title: '项目人员',  
+            dataIndex: 'UID', 
+            render:(text, {ProjectMailList}, index)=>{
               let res = [];
-              res.push(ProjectMailList.map((item)=>{
-                return <span>{item.EmployeeName}<Divider type="vertical" /></span>
+              res.push(ProjectMailList.map((item)=>{ 
+                return <span key={item.ID}>{item.EmployeeName}<Divider type="vertical" /></span>
               }))  
+              //console.log(res);
               return (res)
             }
+
           },
           {
             title: '操作',
-            key: 'operation',
+            dataIndex: 'operation',
+            width:150,
+           // key: 'operation',
             render: (text, projectObj, index) => {
               //const url =`/projects/edit/${UID}`;
               return (

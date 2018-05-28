@@ -53,11 +53,18 @@ function ProjectEditorCmp({
                             })
                         }
                     }
-                })
+                });
 
-                confirmHandler(projectValue, list);
-            }
-            //confirmHandler(values);
+                let deletedList = [];
+                _.forEach(ProjectMailList, function(item,key){
+                    let q =_.includes(Employees, item.MailID.toString());
+                    if(!q){
+                        deletedList.push(item);
+                    }
+                });
+
+                confirmHandler(projectValue, list, deletedList);
+            } 
         });
     } 
  

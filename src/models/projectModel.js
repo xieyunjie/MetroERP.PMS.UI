@@ -29,6 +29,8 @@ export default {
   reducers: {
     save(state, {payload: {data: list, total, searchParams}}) { 
       const pagination = {...state.pagination,total,current:searchParams.page,queryparams:searchParams};
+      
+      console.log("save");
       return { ...state, list, pagination};
     },
 
@@ -40,6 +42,9 @@ export default {
     }, 
     hideEditor(state, action){ 
       const editorVisible = false;  
+
+      console.log("hideEditor");
+      
       return {...state, ...action.payload, editorVisible};
     },
     setCurrentItem(state, action){
@@ -51,19 +56,17 @@ export default {
     * create({payload:obj}, {call,put}){  
         const {success} = yield call(projectSvc.create,obj.values);
         if(success === true){ 
-          yield put({type:'hideEditor'}); 
-          // const {data,total} =  yield call(projectSvc.search, obj.searchParams);
-          // yield put({type:'save', payload:{data,total,searchParams:obj.searchParams}}); 
+          yield put({type:'hideEditor'});  
           yield put({type:'search', payload:obj.searchParams}); 
         }
     },
     * update({payload:obj}, {call,put}){  
         const {success} = yield call(projectSvc.update,obj.values);
-        if(success === true){ 
-          yield put({type:'hideEditor'});
-          // const {data,total} =  yield call(projectSvc.search, obj.searchParams);
-          // yield put({type:'save', payload:{data,total,searchParams:obj.searchParams}}); 
+        //const  success = true;
+        if(success === true){ yield put({type:'hideEditor'}); 
           yield put({type:'search', payload:obj.searchParams}); 
+         
+          
         }
     },
 
@@ -104,7 +107,8 @@ export default {
               endDate: moment().format("YYYY-MM-DD"),
             }
           });
-        }// 这里无法获取得到url参数
+        }
+        // 这里无法获取得到url参数
         // else if(editUrlRegex.test(pathname)){
         //   dispatch({
         //     type: 'getcurrentitem',
