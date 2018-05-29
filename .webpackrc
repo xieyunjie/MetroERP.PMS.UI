@@ -1,4 +1,6 @@
 {
+  "entry":"src/index.js",
+
   "extraBabelPlugins": [ ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }]],
   "proxy": {
     "/pms": {
@@ -6,5 +8,15 @@
       "changeOrigin": true,
       "pathRewrite": { "^/pms" : "" }
     }
+  },       
+  "define":{
+        "process.env.PMSURL_ENV": ""
+  },
+  "env": {
+    "development": {
+      "define":{
+        "process.env.PMSURL_ENV": "/pms"
+      }
+    } 
   }
 }
