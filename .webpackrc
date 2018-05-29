@@ -8,14 +8,16 @@
       "changeOrigin": true,
       "pathRewrite": { "^/pms" : "" }
     }
-  },       
-  "define":{
-        "process.env.PMSURL_ENV": ""
-  },
+  },  
   "env": {
     "development": {
       "define":{
         "process.env.PMSURL_ENV": "/pms"
+      }
+    },
+    "production":{
+      "define":{
+       "process.env.PMSURL_ENV": ""
       }
     } 
   }
