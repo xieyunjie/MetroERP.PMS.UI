@@ -1,5 +1,6 @@
 import * as projectSvc from '../services/projectService';
 import moment from 'moment';
+import qs from 'querystring';
 //import {PAGE_SIZE} from '../utils/constants';
 //import { stat } from 'fs'; 
 const page_size = 2;
@@ -34,10 +35,11 @@ export default {
       return { ...state, list, pagination};
     },
 
-    showEditor(state,action){
+    showEditor(state, action){
       const editorVisible = true;   
       const MailList = action.payload.MailList,
-            currentItem = action.payload.currentItem;
+            currentItem = action.payload.currentItem; 
+            
       return {...state, ...action.payload, editorVisible, MailList, currentItem};
     }, 
     hideEditor(state, action){ 
@@ -48,7 +50,7 @@ export default {
       return {...state, ...action.payload, editorVisible};
     },
     setCurrentItem(state, action){
-      return {...state, currentItem:action.payload};
+      return {...state, currentItem: action.payload};
     }
   },
 
@@ -64,9 +66,7 @@ export default {
         const {success} = yield call(projectSvc.update,obj.values);
         //const  success = true;
         if(success === true){ yield put({type:'hideEditor'}); 
-          yield put({type:'search', payload:obj.searchParams}); 
-         
-          
+          yield put({type:'search', payload:obj.searchParams});          
         }
     },
 
@@ -75,16 +75,42 @@ export default {
         yield put({type: 'save', payload: {data,total,searchParams}});
     },
 
-    * initEditor({payload},{call,put}){
+    * initEditor({ payload },{ call, put }){
+    
         const {data} = yield call(projectSvc.GetMailList)
-        yield put({type:'showEditor',payload:{MailList:data, currentItem:payload.currentItem}});
+        yield put({ type:'showEditor', payload:{ MailList:data, currentItem: payload.currentItem}});
     },
-    * getCurrentItem({payload:id},{call,put}){ 
-        let data = {};
-        if(id===0){
-          data = yield call(projectSvc.getOneProject,id).data;  
+    * getCurrentItem({payload:id},{call,put}){   
+      
+        let currentItem = {}; 
+        if(id === '00000000-0000-0000-0000-000000000000'){
+          
+          currentItem = {
+            UID:'00000000-0000-0000-0000-000000000000',
+            ProjectName:'',
+            ProjectContext:'',
+            BeginDate: moment().format('YYYY-MM-DD'),
+            EndDate: moment().format('YYYY-MM-DD'), 
+            Status: 1,
+            FinishDate: null,
+            Comment:'',
+            CreatorUID:'00000000-0000-0000-0000-000000000000',
+            CreateTime:'',
+            CreatorName:''
+          } 
         } 
-        yield put ({type: 'setCurrentItem', payload: {data}});
+        else {
+         const q = yield call(projectSvc.getOneProject, id);  
+         currentItem = q.data;
+        }
+        
+        const {data} = yield call(projectSvc.GetMailList)
+        // console.log('====================================');
+        // console.log(currentItem); 
+        // console.log('====================================');
+
+        yield put({ type:'showEditor', payload:{ MailList:data, currentItem: currentItem}});
+        //yield put ({type: 'setCurrentItem', payload: {data}});
     }
   },
 
@@ -92,9 +118,10 @@ export default {
     setup(obj) { 
       const history = obj.history,
             dispatch = obj.dispatch;
-       console.log(obj);
+       //console.log(obj);
        
       return history.listen((location) => {
+        //console.log(location);
         const pathname = location.pathname;
         if (pathname === '/projects') {
           dispatch({
@@ -108,6 +135,14 @@ export default {
             }
           });
         }
+        else if(pathname === "/projects/edit"){ 
+
+          const p = qs.parse( location.search.substring(1, location.search.length));
+          dispatch({
+            type: 'getCurrentItem',
+            payload:p.uid 
+          });
+        }
         // 这里无法获取得到url参数
         // else if(editUrlRegex.test(pathname)){
         //   dispatch({
@@ -117,6 +152,7 @@ export default {
         //     }
         //   });
         // }
+
       });
     },
   },

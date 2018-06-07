@@ -2,9 +2,10 @@ import React from 'react'
 //import { connect } from 'dva';
 //import {Link} from 'dva/router'
 import { Table, Popconfirm, Form, Input, Button, DatePicker,Pagination, Icon, Divider } from 'antd';
-//import {PAGE_SIZE} from '../../utils/constants';
+//import {EMPTY_UID} from '../../utils/constants';
 import styles from './Project.css';  
 import moment from 'moment'; 
+import { createHashHistory } from 'history'
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -33,6 +34,11 @@ function ProjectCmp({
     // const editPoject = function(e){
     //   console.log("dddd");
     // }
+    const pushProjectEditView = function(uid){ 
+      // console.log(uid);
+      const history = createHashHistory()  
+      history.push({pathname:'/projects/edit?uid=' + uid});
+    }
     const columns=[
         {
             title: '项目名称',
@@ -79,13 +85,14 @@ function ProjectCmp({
           {
             title: '操作',
             dataIndex: 'operation',
-            width:150,
+            width:300,
            // key: 'operation',
             render: (text, projectObj, index) => {
               //const url =`/projects/edit/${UID}`;
               return (
                 <span className={styles.operation}> 
                  <Button type="primary" ghost onClick={showEditor.bind(null,projectObj)}>编辑</Button>
+                 <Button type="primary" ghost onClick={pushProjectEditView.bind(null,projectObj.UID)}>编辑 View</Button>
                   {/* <Link to={url}>编辑</Link> */}
                   <Popconfirm title="是否确认删除?" onConfirm={deleteHandler.bind(null, projectObj.UID)}>
                     <a href="">删除</a>
@@ -118,6 +125,8 @@ function ProjectCmp({
               <Button type="primary" onClick = {onSearch}><Icon type="search" />查找</Button>
               <Divider type="vertical" />
               <Button type="success" onClick = {showEditor.bind(null,null)}><Icon type="plus" />Add</Button>
+              <Divider type="vertical" />
+              <Button type="success" onClick = {pushProjectEditView.bind(null,"00000000-0000-0000-0000-000000000000")}><Icon type="plus" />Add View</Button>
               <Divider type="vertical" />
               <Button type="success" onClick = {onAddIndexValue}><Icon type="plus" />onAddIndexValue</Button>
             </FormItem> 

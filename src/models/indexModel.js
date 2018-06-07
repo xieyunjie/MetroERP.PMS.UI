@@ -11,7 +11,8 @@ export default {
         setup({
           dispatch,
           history,state
-        }) { 
+        }) {  
+          //console.log(history);
           return history.listen((location) => { 
             //console.log(location); 
           });

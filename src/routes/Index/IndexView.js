@@ -20,9 +20,13 @@ class IndexView extends Component{
     // componentWillMount() {
     //     console.log('Component WILL MOUNT!')
     // }
+    // getInitialState(){
+    //     console.log('Component getInitialState !!')
+    //     return this.props;
+    // }
     componentDidMount() {
          console.log('Component DID MOUNT!')
-    }
+    } 
     // componentWillReceiveProps(newProps) {
     //       console.log('Component WILL RECEIVE PROPS!')
     // }
@@ -38,10 +42,16 @@ class IndexView extends Component{
     componentWillUnmount() {
            console.log('Component WILL UNMOUNT!')
     }
-
+    
     render(){
+        const that = this;
+        const onAddIndexValue = function(e){ 
+            that.props.dispatch({type:'index/add'})
+        };
+
      const indexProps = {
-        indexValue:this.props.index.indexValue
+        indexValue: this.props.index.indexValue,
+        onAddIndexValue
         }
         return (
             <IndexCmp {...indexProps}/>

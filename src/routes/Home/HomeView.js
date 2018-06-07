@@ -3,7 +3,7 @@ import { Route, Link, HashRouter} from 'dva/router';
 import {connect} from 'dva';  
 import { Layout, Menu, Breadcrumb, LocaleProvider } from 'antd'; 
 import ProjectView from './../Project/ProjectView';
-//import ProjectEditView from './../Project/ProjectEditView';
+import ProjectEditView from './../Project/ProjectEditView';
 import IndexView from './../Index/IndexView'
 
 import style from './HomeView.css'
@@ -46,7 +46,8 @@ function HomeView({match, children, home}){
             
               <Route  path="/"  exact component={IndexView} />  
               <Route path="/index" exact component={IndexView} /> 
-              <Route path="/projects" exact component={ProjectView} />
+              <Route path="/projects" exact component={ProjectView} /> 
+              <Route path="/projects/edit" exact component={ProjectEditView} />
               {/* <Route path='/projects/edit/:projectuid' component={ProjectEditView} /> */}
               {/* <Route path="/projects/:projectuid" exact component={ProjectEditView} /> */}
            

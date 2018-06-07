@@ -13,8 +13,8 @@ export function search(searchParsms) {
 export function GetMailList(){
   return req.get(`${pmsUrl}/MailList/GetMailListByQuery?query=&page=1&start=0&limit=25`);
 }
-export function getOneProject(id){
-  return req.get(`${pmsUrl}/Project/GetOne`, {id});
+export function getOneProject(uid){  
+  return req.get(`${pmsUrl}/Project/GetOne`, {uid});
 }
 
 export function create(values){
